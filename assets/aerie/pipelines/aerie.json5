@@ -1,0 +1,157 @@
+// Before checking out the json of this pipeline shader I highly recommend checking out the json of the canvas pipelines,
+// it serves as better documentation.
+{
+    nameKey: "pipeline.aerie.name",
+    descriptionKey: "pipeline.aerie.desc",
+
+    glslVersion: 330,
+    smoothBrightnessBidirectionaly: true,
+    rainSmoothingFrames: 100,
+    enablePBR: false,
+    runVanillaClear: true,
+
+    materialProgram: {
+        vertexSource: "aerie:shaders/gbuffer/main.vert",
+        fragmentSource: "aerie:shaders/gbuffer/main.frag",
+
+        // Enchantment glint sampler
+        samplers: [
+            "u_glint"
+        ],
+        samplerImages: [
+            "minecraft:textures/misc/enchanted_item_glint.png"
+        ]
+    },
+
+    drawTargets: {
+        solidTerrain: "main_gbuffer",
+        translucentTerrain: "translucent_gbuffer",
+        translucentEntity: "entity_gbuffer",
+        weather: "weather_gbuffer",
+        clouds: "clouds_gbuffer",
+        translucentParticles: "particles_gbuffer"
+    },
+
+    fabulousTargets: {
+        translucent: "translucent_unmanaged",
+        entity: "entity_unmanaged",
+        weather: "weather_unmanaged",
+        clouds: "clouds_unmanaged",
+        particles: "particles_unmanaged"
+    },
+
+    defaultFramebuffer: "main_unmanaged",
+
+    beforeWorldRender: {
+        passes: [
+            {
+                name: "clear_main_gbuffer",
+                framebuffer: "main_gbuffer",
+                program: "frex_clear",
+            },
+            {
+                name: "clear_translucent_gbuffer",
+                framebuffer: "translucent_gbuffer",
+                program: "frex_clear"
+            },
+            {
+                name: "clear_entity_gbuffer",
+                framebuffer: "entity_gbuffer",
+                program: "frex_clear"
+            },
+            {
+                name: "clear_weather_gbuffer",
+                framebuffer: "weather_gbuffer",
+                program: "frex_clear"
+            },
+            {
+                name: "clear_clouds_gbuffer",
+                framebuffer: "clouds_gbuffer",
+                program: "frex_clear"
+            },
+            {
+                name: "clear_particles_gbuffer",
+                framebuffer: "particles_gbuffer",
+                program: "frex_clear"
+            }
+        ]
+    },
+
+    images: [
+        {
+            name: "main_color",
+            lod: 0,
+            // HDR color format - needed for transferring color data outside the range of [0, 1]
+            // Make sure all buffers your color info passes through have a floating point format, else you'll lose information
+            // If you only need rgb, I recommend R11F_G11F_B10F, if you need rgba, use RGBA16F
+            internalFormat: "RGBA16F",
+            pixelFormat: "RGBA",
+            pixelDataType: "UNSIGNED_BYTE",
+            target: "TEXTURE_2D",
+            texParams: [
+                {name: "TEXTURE_MIN_FILTER", val: "NEAREST"},
+                {name: "TEXTURE_MAG_FILTER", val: "NEAREST"},
+                {name: "TEXTURE_WRAP_S", val: "CLAMP_TO_EDGE"}, 
+                {name: "TEXTURE_WRAP_T", val: "CLAMP_TO_EDGE"}
+            ]
+        },
+        {
+            name: "main_depth",
+            lod: 0,
+            internalFormat: "DEPTH_COMPONENT",
+            pixelFormat: "DEPTH_COMPONENT",
+            pixelDataType: "FLOAT",
+            target: "TEXTURE_2D",
+            texParams: [ 
+                {name: "TEXTURE_MIN_FILTER", val: "NEAREST"}, 
+                {name: "TEXTURE_MAG_FILTER", val: "NEAREST"},
+                {name: "TEXTURE_WRAP_S", val: "CLAMP_TO_EDGE"}, 
+                {name: "TEXTURE_WRAP_T", val: "CLAMP_TO_EDGE"},
+                {name: "TEXTURE_COMPARE_MODE", val: "NONE"}
+            ]
+        }
+    ],
+
+    framebuffers: [
+        {
+            name: "main_gbuffer",
+            depthAttachment: {
+                image: "main_depth", 
+                clearDepth: 1.0
+            },
+            colorAttachments: [
+                {
+                    image: "main_color",
+                    clearColor: 0x00000000
+                }
+            ]
+        },
+        {
+            name: "main_unmanaged",
+            depthAttachment: {
+                image: "main_depth"
+            },
+            colorAttachments: [
+                {
+                    image: "main_color"
+                }
+            ]
+        }
+    ],
+
+    sky: {
+        defaultZenithAngle: 0   
+    },
+
+
+    include: [
+        "aerie:include/config.json5",
+        "aerie:include/composite/clouds.json5",
+        "aerie:include/composite/entity.json5",
+        "aerie:include/composite/particles.json5",
+        "aerie:include/composite/translucent.json5",
+        "aerie:include/composite/weather.json5",
+        "aerie:include/stage_fabulous.json5"
+        "aerie:include/stage_fullscreen.json5"
+    ]
+}

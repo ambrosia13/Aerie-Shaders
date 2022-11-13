@@ -1,0 +1,48 @@
+{
+    options: [
+        {
+            includeToken: "aerie:general",
+            categoryKey: "config.aerie.category.general",
+            elements: {
+                emission: {
+                    default: 3.0,
+                    min: 0.0,
+                    max: 20.0,
+                    nameKey: "config.aerie.name.emission",
+                    descriptionKey: "config.aerie.desc.emission"
+                },
+                handheld_light: {
+                    default: true,
+                    nameKey: "config.aerie.name.handheld_light",
+                    descriptionKey: "config.aerie.desc.handheld_light"
+                },
+                taa: {
+                    default: true,
+                    nameKey: "config.aerie.name.taa",
+                    descriptionKey: "config.aerie.desc.taa"
+                },
+                fog: {
+                    default: true,
+                    nameKey: "config.aerie.name.fog",
+                    descriptionKey: "config.aerie.desc.fog"
+                },
+                rain_fog: {
+                    default: true,
+                    nameKey: "config.aerie.name.rain_fog",
+                    descriptionKey: "config.aerie.desc.rain_fog"
+                },
+            }
+        },
+        {
+            includeToken: "aerie:bloom",
+            categoryKey: "config.aerie.category.bloom",
+            elements: {
+                enable_bloom: {
+                    default: true,
+                    nameKey: "config.aerie.name.enable_bloom",
+                    descriptionKey: "config.aerie.desc.enable_bloom"
+                }
+            }
+        }
+    ]
+}

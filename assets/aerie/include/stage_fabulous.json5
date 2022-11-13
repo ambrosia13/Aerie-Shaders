@@ -1,0 +1,109 @@
+{
+    images: [
+        {
+            name: "sort",
+            lod: 0,
+            internalFormat: "R11F_G11F_B10F",
+            pixelFormat: "RGBA",
+            pixelDataType: "UNSIGNED_BYTE",
+            target: "TEXTURE_2D",
+            texParams: [
+                {
+                    name: "TEXTURE_MIN_FILTER", val: "LINEAR"
+                }, 
+                {
+                    name: "TEXTURE_MAG_FILTER", val: "LINEAR"
+                },
+                {
+                    name: "TEXTURE_WRAP_S", val: "CLAMP_TO_EDGE"
+                }, 
+                {
+                    name: "TEXTURE_WRAP_T", val: "CLAMP_TO_EDGE"
+                }
+            ]
+        },
+    ],
+
+    framebuffers: [
+        {
+            name: "sort",
+            colorAttachments: [
+                {
+                    image: "sort", clearColor: 0x00000000
+                }
+            ]
+        },
+        {
+            name: "copy_to_main",
+            colorAttachments: [
+                {
+                    image: "main_color", clearColor: 0x00000000
+                }
+            ]
+        }
+    ],
+
+    programs: [
+        {
+            name: "sort",
+            vertexSource: "aerie:shaders/post/frame_full.vert",
+            fragmentSource: "aerie:shaders/post/fabulous/sort.frag",
+            samplers: [
+                "u_main_color",
+                "u_main_depth",
+                "u_translucent_color",
+                "u_translucent_depth",
+                "u_entity_color",
+                "u_entity_depth",
+                "u_weather_color",
+                "u_weather_depth",
+                "u_clouds_color",
+                "u_clouds_depth",
+                "u_particles_color",
+                "u_particles_depth"
+            ]
+        },
+        {
+            name: "copy",
+            vertexSource: "aerie:shaders/post/frame_full.vert",
+            fragmentSource: "aerie:shaders/post/fabulous/copy.frag",
+            samplers: [
+                "u_composite"
+            ]
+        }
+    ],
+
+    fabulous: {
+        passes: [
+            {
+                name: "sort",
+                program: "sort",
+                framebuffer: "sort",
+                samplerImages: [
+                    "main_color",
+                    "main_depth",
+                    "translucent_color",
+                    "translucent_depth",
+                    "entity_color",
+                    "entity_depth",
+                    "weather_color",
+                    "weather_depth",
+                    "clouds_color",
+                    "clouds_depth",
+                    "particles_color",
+                    "particles_depth",
+                    "translucent_data",
+                    "translucent_normal"
+                ]
+            },
+            {
+                name: "copy",
+                program: "copy",
+                framebuffer: "copy_to_main",
+                samplerImages: [
+                    "sort"
+                ]
+            }
+        ]
+    }
+}
