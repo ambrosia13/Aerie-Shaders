@@ -2,7 +2,7 @@
 // #include aerie:shaders/lib/includes.glsl 
 // --------------------------------------------------------------------------------------------------------
 
-// Header to all my shader files
+// Header to all shader files
 
 uniform ivec2 frxu_size;
 uniform int frxu_lod;
