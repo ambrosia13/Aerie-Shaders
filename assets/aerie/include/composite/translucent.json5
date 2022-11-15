@@ -4,7 +4,7 @@
             name: "translucent_color",
             lod: 0,
             // noticeable banding so I increased to RGBA12
-            internalFormat: "RGBA12",
+            internalFormat: "RGBA8",
             pixelFormat: "RGBA",
             pixelDataType: "UNSIGNED_BYTE",
             target: "TEXTURE_2D",
