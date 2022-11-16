@@ -104,7 +104,7 @@ void main() {
     vec3 cloudPos = setupSceneSpacePos(texcoord, clouds_depth);
     clouds_color.a = mix(clouds_color.a, 0.0, frx_smootherstep(192.0, 320.0, length(cloudPos.xz)));
 
-    if(max(max_depth, max(clamp(clouds_depth, 0.0, 0.999), clamp(weather_depth, 0.0, 0.999))) == 1.0) {
+    if(max_depth == 1.0) {
         // forward rendering doesn't control the sky, so we put sky to linear in post
         main_color.rgb = pow(main_color.rgb, vec3(2.2));
 
