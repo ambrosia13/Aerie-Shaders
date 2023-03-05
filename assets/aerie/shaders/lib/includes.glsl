@@ -20,6 +20,8 @@ vec2 taaOffsets[8] = vec2[8](
 );
 
 #include aerie:general
+#include aerie:lighting
+#include aerie:normals
 #include aerie:bloom
 
 #include aerie:shaders/lib/api_includes.glsl 
