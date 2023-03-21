@@ -98,7 +98,7 @@ void main() {
 	float blockDist = length(sceneSpacePos);
 
 	#ifdef FOG 
-		float vanillaFogFactor = smoothstep(frx_fogStart - 0.35 * frx_viewDistance * (1.0 - frx_cameraInFluid), frx_fogEnd, blockDist);
+		float vanillaFogFactor = smoothstep(frx_fogStart * FOG_START_MULTIPLIER, frx_fogEnd, blockDist);
 	#else
 		float vanillaFogFactor = 0.0;
 	#endif
@@ -109,7 +109,8 @@ void main() {
 		float rainFogFactor = 0.0;
 	#endif
 
-	composite = mix(composite, pow(frx_fogColor.rgb, vec3(2.2)), (1.0 - floor(compositeDepth)) * max(vanillaFogFactor, rainFogFactor) * frx_smoothedEyeBrightness.y);
+	if(frx_cameraInFluid == 0) vanillaFogFactor *= frx_smoothedEyeBrightness.y;
+	composite = mix(composite, pow(frx_fogColor.rgb, vec3(2.2)), (1.0 - floor(compositeDepth)) * max(vanillaFogFactor, rainFogFactor));
 
 	insertLayer(composite, cloudsColor, compositeDepth, cloudsDepth);
 	insertLayer(composite, weatherColor, compositeDepth, weatherDepth);

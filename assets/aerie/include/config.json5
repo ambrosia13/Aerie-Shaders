@@ -14,6 +14,13 @@
 					nameKey: "config.aerie.name.fog",
 					descriptionKey: "config.aerie.desc.fog"
 				},
+				fog_start_multiplier: {
+					default: 0.75,
+					min: 0.0,
+					max: 1.0,
+					nameKey: "config.aerie.name.fog_start_multiplier",
+					descriptionKey: "config.aerie.desc.fog_start_multiplier"
+				},
 				rain_fog: {
 					default: true,
 					nameKey: "config.aerie.name.rain_fog",
@@ -49,6 +56,11 @@
 					nameKey: "config.aerie.name.handheld_light",
 					descriptionKey: "config.aerie.desc.handheld_light"
 				},
+				blocky_handheld_light: {
+					default: false,
+					nameKey: "config.aerie.name.blocky_handheld_light",
+					descriptionKey: "config.aerie.desc.blocky_handheld_light"
+				},
 				diffuse_light: {
 					default: true,
 					nameKey: "config.aerie.name.diffuse_light",
@@ -71,7 +83,7 @@
 			categoryKey: "config.aerie.category.normals",
 			elements: {
 				diffuse_skylight: {
-					default: true,
+					default: false,
 					nameKey: "config.aerie.name.diffuse_skylight",
 					descriptionKey: "config.aerie.desc.diffuse_skylight"
 				},

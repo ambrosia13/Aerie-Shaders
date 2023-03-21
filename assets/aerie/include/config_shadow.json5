@@ -1,0 +1,15 @@
+{
+	// options: [
+	// 	{
+	// 		includeToken: "aerie:shadows",
+	// 		categoryKey: "config.aerie.category.shadows",
+	// 		elements: {
+	// 			shadows: {
+	// 				default: true,
+	// 				nameKey: "config.aerie.name.shadows",
+	// 				descriptionKey: "config.aerie.desc.shadows"
+	// 			}
+	// 		}
+	// 	}
+	// ]
+}
