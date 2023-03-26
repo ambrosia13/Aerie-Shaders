@@ -114,15 +114,19 @@ void lighting(const in float shadowFactor) {
 
 	// Diffuse lighting
 	#ifdef DIFFUSE_LIGHT
-		#ifndef DIFFUSE_SKYLIGHT
-			vec3 dir = vec3(-0.1825, 0.9128, 0.3651);
-		#else
-			vec3 dir = frx_skyLightVector;
-		#endif
+		{
+			#ifndef DIFFUSE_SKYLIGHT
+				vec3 dir = vec3(-0.1825, 0.9128, 0.3651);
+			#else
+				vec3 dir = mix(vec3(0.0, 1.0, 0.0), frx_skyLightVector, frx_skyLightTransitionFactor * frx_fragLight.y);
+				
+				if(isInventory) dir = vec3(0.2, 0.5, 0.8);
+			#endif
 
-		float NdotL = clamp01(dot(mix(frx_fragNormal, vec3(0.0, 1.0, 0.0), float(frx_matDisableDiffuse)), dir));
-		// NdotL = mix(NdotL, 1.0, float(frx_matDisableDiffuse));
-		lightmap *= min(1.0, NdotL * 0.6 + 0.6);
+			float NdotL = (dot(mix(frx_fragNormal, vec3(0.0, 1.0, 0.0), float(frx_matDisableDiffuse)), dir)) * 0.5 + 0.5;
+			// NdotL = mix(NdotL, 1.0, float(frx_matDisableDiffuse));
+			lightmap *= min(1.0, NdotL * 0.6 + 0.4);
+		}
 	#endif
 
 	#ifdef SHADOWS
@@ -139,11 +143,12 @@ void lighting(const in float shadowFactor) {
 
 
 	// Handheld lighting
+	// To whoever is reading this code in the future, I am sorry.
 	#ifdef HANDHELD_LIGHT
 		if(!isInventory) {
 			#ifdef BLOCKY_HANDHELD_LIGHT
 				vec3 wrappedCoord = frx_vertex.xyz - 0.1 * frx_vertexNormal + frx_cameraPos;
-				wrappedCoord = floor(wrappedCoord);
+				wrappedCoord = floor(wrappedCoord) + 0.5;
 				wrappedCoord -= frx_cameraPos;
 			#else
 				vec3 wrappedCoord = frx_vertex.xyz;
@@ -155,13 +160,32 @@ void lighting(const in float shadowFactor) {
 			vec3 playerNormal = normalize(playerPos);
 
 			float lightDist = length(playerPos);
-			NdotL = mix(clamp01(dot(-frx_fragNormal, playerNormal)), 1.0, smoothstep(1.0, 0.0, lightDist));
+			float NdotL = mix(clamp01(dot(-frx_fragNormal, playerNormal)), 1.0, smoothstep(1.0, 0.0, lightDist));
 
-			float attenuationFactor = smoothstep(frx_heldLight.a * (7.0 + 3.0 * frx_viewBrightness), 0.0, lightDist) * NdotL;
+			float attenuationFactor = smoothstep(
+				frx_heldLight.a * 
+				#ifdef BLOCKY_HANDHELD_LIGHT
+					(7.0 + 3.0 * frx_viewBrightness),
+				#else
+					(10.0 + 5.0 * frx_viewBrightness),
+				#endif
+				0.0, 
+				lightDist
+			);
+
+			#ifndef BLOCKY_HANDHELD_LIGHT
+				attenuationFactor *= NdotL;
+			#endif
+
 			attenuationFactor = mix(attenuationFactor, 1.0, float(frx_isHand) * frx_heldLight.a);
 			
-			vec3 heldLight = frx_heldLight.rgb * attenuationFactor;
-			lightmap = mix(lightmap, max(pow(frx_heldLight.rgb * 1.3, vec3(2.0)), lightmap), attenuationFactor);//min(lightmap + heldLight, frx_emissiveColor.rgb);
+			#ifdef COLORED_HANDHELD_LIGHT
+				vec3 heldLightColor = pow(frx_heldLight.rgb * 1.3, vec3(2.0));
+			#else
+				vec3 heldLightColor = texture(frxs_lightmap, vec2(attenuationFactor * 7.0 / 8.0 + 1.0 / 16.0, frx_fragLight.y)).rgb;
+			#endif
+
+			lightmap = mix(lightmap, max(heldLightColor, lightmap), attenuationFactor);//min(lightmap + heldLight, frx_emissiveColor.rgb);
 		}
 	#endif
 
@@ -183,7 +207,4 @@ void lighting(const in float shadowFactor) {
 
 	// Apply lightmap
 	frx_fragColor.rgb *= mix(lightmap, frx_emissiveColor.rgb + vec3(EMISSION) * float(!isInventory), frx_fragEmissive);
-
-	// Transform the frx_fragColor into gamma space
-	if(!isInventory) frx_fragColor.rgb = pow(frx_fragColor.rgb, vec3(2.2));
 }

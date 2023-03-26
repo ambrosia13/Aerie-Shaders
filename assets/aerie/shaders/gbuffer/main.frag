@@ -67,6 +67,27 @@ void frx_pipelineFragment() {
 
 	lighting(shadowFactor);
 
+	float blockDist = length(frx_vertex.xz);
+	float lightFactor = smoothstep(0.0, 0.5, frx_fragLight.y);
+
+	#ifdef FOG 
+		float vanillaFogFactor = smoothstep(frx_fogStart * FOG_START_MULTIPLIER, frx_fogEnd, blockDist);
+		if(frx_cameraInFluid == 0) vanillaFogFactor *= lightFactor;
+	#else
+		float vanillaFogFactor = 0.0;
+	#endif
+
+	#ifdef RAIN_FOG
+		float rainFogFactor = (1.0 - exp(-blockDist / frx_viewDistance)) * frx_rainGradient * lightFactor;
+	#else
+		float rainFogFactor = 0.0;
+	#endif
+
+	frx_fragColor = mix(frx_fragColor, frx_fogColor, max(vanillaFogFactor, rainFogFactor));
+
+	// Transform the frx_fragColor into gamma space
+	if(!isInventory) frx_fragColor.rgb = pow(frx_fragColor.rgb, vec3(2.2));
+
 	fragColor = frx_fragColor;
 	gl_FragDepth = gl_FragCoord.z;
 }

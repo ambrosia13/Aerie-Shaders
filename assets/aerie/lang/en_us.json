@@ -14,6 +14,8 @@
 	"config.aerie.desc.rain_fog": "Subtle exponential fog during rain.",
 	"config.aerie.name.brighter_sun_and_moon": "Brighter Sun and Moon",
 	"config.aerie.desc.brighter_sun_and_moon": "Increases the brightness of the sun and moon. \nWill not work for resource packs that change the sun and moon shape.",
+	"config.aerie.name.alpha_foliage": "Alpha Foliage",
+	"config.aerie.desc.alpha_foliage": "Adjusts the foliage tint color to look more like Minecraft Alpha.",
 
 	"config.aerie.category.lighting": "Lighting Settings",
 
@@ -23,6 +25,8 @@
 	"config.aerie.desc.ao_strength": "The darkness of corners.",
 	"config.aerie.name.handheld_light": "Handheld Light",
 	"config.aerie.desc.handheld_light": "Handheld light handled by the shader. Only works for the player.",
+	"config.aerie.name.colored_handheld_light": "Colored Handheld Light",
+	"config.aerie.desc.colored_handheld_light": "Enables custom colored handheld light as defined by the FREX Held Light API.",
 	"config.aerie.name.blocky_handheld_light": "Blocky Handheld Light",
 	"config.aerie.desc.blocky_handheld_light": "Enable this to make handheld light look less out of place when smooth lighting is disabled.",
 	"config.aerie.name.diffuse_light": "Diffuse Light",
