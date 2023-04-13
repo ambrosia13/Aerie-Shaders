@@ -9,22 +9,27 @@ uniform int frxu_lod;
 
 // Offsets from Chocapic13 shaders
 vec2 taaOffsets[8] = vec2[8](
-    vec2( 0.125,-0.375),
-    vec2(-0.125, 0.375),
-    vec2( 0.625, 0.125),
-    vec2( 0.375,-0.625),
-    vec2(-0.625, 0.625),
-    vec2(-0.875,-0.125),
-    vec2( 0.375,-0.875),
-    vec2( 0.875, 0.875)
+	vec2( 0.125,-0.375),
+	vec2(-0.125, 0.375),
+	vec2( 0.625, 0.125),
+	vec2( 0.375,-0.625),
+	vec2(-0.625, 0.625),
+	vec2(-0.875,-0.125),
+	vec2( 0.375,-0.875),
+	vec2( 0.875, 0.875)
 );
 
 #include aerie:general
 #include aerie:lighting
+#include aerie:clouds
 #include aerie:normals
 #include aerie:bloom
 #include aerie:shadows
 
-#include aerie:shaders/lib/api_includes.glsl 
-#include aerie:shaders/lib/functions/external.glsl
+#include aerie:shaders/lib/api_includes.glsl
+#include aerie:shaders/lib/functions/ext.glsl
 #include aerie:shaders/lib/functions/utility.glsl
+
+#ifdef CUSTOM_CLOUDS
+#include aerie:shaders/lib/functions/clouds.glsl
+#endif

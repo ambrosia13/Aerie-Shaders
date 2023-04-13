@@ -89,6 +89,24 @@
 			}
 		},
 		{
+			includeToken: "aerie:clouds",
+			categoryKey: "config.aerie.category.clouds",
+			elements: {
+				custom_clouds: {
+					default: true,
+					nameKey: "config.aerie.name.custom_clouds",
+					descriptionKey: "config.aerie.desc.custom_clouds"
+				},
+				cloud_layers: {
+					default: 3,
+					min: 1,
+					max: 3,
+					nameKey: "config.aerie.name.cloud_layers",
+					descriptionKey: "config.aerie.desc.cloud_layers"
+				},
+			}
+		},
+		{
 			includeToken: "aerie:normals",
 			categoryKey: "config.aerie.category.normals",
 			elements: {

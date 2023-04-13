@@ -27,7 +27,7 @@ void main() {
 	float l = frx_luminance(finalColor);
 
 	// Tone map
-	finalColor = tanh(finalColor);
+	finalColor = tanh(finalColor * 1.1);
 	//finalColor = frx_toneMap(finalColor * 1.2);
 
 	// Transform the color into sRGB space

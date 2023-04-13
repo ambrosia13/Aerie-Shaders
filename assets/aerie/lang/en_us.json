@@ -36,6 +36,13 @@
 	"config.aerie.name.true_night_darkness": "True Night Darkness",
 	"config.aerie.desc.true_night_darkness": "Darkens the bright ambient light during night. \nDepends on moon phase.",
 
+	"config.aerie.category.clouds": "Custom Cloud Settings",
+
+	"config.aerie.name.custom_clouds": "Enable Custom Clouds",
+	"config.aerie.desc.custom_clouds": "Uses voxel ray tracing to draw custom clouds. Can be really slow on some machines.",
+	"config.aerie.name.cloud_layers": "Cloud Layers",
+	"config.aerie.desc.cloud_layers": "How many cloud layers to draw.",
+
 	"config.aerie.category.normals": "Normals Settings",
 
 	"config.aerie.name.diffuse_skylight": "Diffuse Skylight",

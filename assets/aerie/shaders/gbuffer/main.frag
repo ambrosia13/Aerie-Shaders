@@ -3,7 +3,7 @@
 uniform sampler2D u_glint;
 
 // // All common forward shading stuff is in this file
-#include aerie:shaders/gbuffer/common.glsl
+#include aerie:shaders/gbuffer/gbuffer_common.glsl
 
 layout(location = 0) out vec4 fragColor;
 

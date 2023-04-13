@@ -13,6 +13,8 @@ uniform sampler2D u_clouds_depth;
 uniform sampler2D u_particles_color;
 uniform sampler2D u_particles_depth;
 
+uniform sampler2D u_noise;
+
 in vec2 texcoord;
 
 layout(location = 0) out vec4 fragColor;
@@ -42,10 +44,6 @@ void main() {
 	
 	vec4 entityColor = texture(u_entity_color, texcoord);
 	float entityDepth = texture(u_entity_depth, texcoord).r;
-
-	vec4 cloudsColor = texture(u_clouds_color, texcoord);
-	cloudsColor.rgb = pow(cloudsColor.rgb, vec3(2.2));
-	float cloudsDepth = texture(u_clouds_depth, texcoord).r;
 
 	vec4 weatherColor = texture(u_weather_color, texcoord);
 	weatherColor.rgb = pow(weatherColor.rgb, vec3(2.2));
@@ -90,10 +88,37 @@ void main() {
 	vec3 composite = mainColor.rgb;
 	float compositeDepth = mainDepth;
 
+	#ifdef CUSTOM_CLOUDS
+		vec3 sceneSpacePos = setupSceneSpacePos(texcoord, compositeDepth);
+
+		vec4 cloudsColor = vec4(0.0);
+		float cloudsDepth = 1.0;
+
+		Hit cloudsHit = raytraceClouds(viewDir, u_noise);
+		float cloudsHitDistance = length(cloudsHit.pos);
+
+		if(cloudsHit.success && cloudsHitDistance < length(sceneSpacePos)) {
+			float NdotL = clamp01(dot(cloudsHit.normal, vec3(0.2, 1.0, 0.4)) * 0.3 + 0.5);
+
+			vec3 direct = NdotL * frx_skyLightColor * 0.75;
+			vec3 ambient = frx_skyLightAtmosphericColor * 0.125;
+
+			cloudsColor.rgb = 1.2 * (direct + ambient) * frx_ambientIntensity * frx_ambientIntensity;
+			cloudsColor.a = exp(-cloudsHitDistance * 0.0015);
+
+			cloudsDepth = sceneSpaceToScreenSpace(cloudsHit.pos).z;
+			// composite = mix(composite, cloudsColor, cloudsAlpha);
+		}
+	#endif
+
 	insertLayer(composite, translucentColor, compositeDepth, translucentDepth);
 	insertLayer(composite, particlesColor, compositeDepth, particlesDepth);
 	insertLayer(composite, entityColor, compositeDepth, entityDepth);
-	insertLayer(composite, cloudsColor, compositeDepth, cloudsDepth);
+
+	#ifdef CUSTOM_CLOUDS
+		insertLayer(composite, cloudsColor, compositeDepth, cloudsDepth);
+	#endif
+
 	insertLayer(composite, weatherColor, compositeDepth, weatherDepth);
 
 	fragColor = vec4(composite, 1.0);
