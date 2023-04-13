@@ -94,6 +94,13 @@ Hit raytraceClouds(vec3 viewDir, sampler2D noise) {
 		// startPos.xz += frx_renderSeconds * (3.0 - i) * 0.5;
 		// endPos.xz += frx_renderSeconds * (3.0 - i) * 0.5;
 
+		if(distToLowerBoundingPlane > distToUpperBoundingPlane) {
+			vec3 temp = startPos;
+
+			startPos = endPos;
+			endPos = temp;
+		}
+
 		Hit thisHit = raytraceCloudLayer(startPos, endPos, 20, i, noise);
 
 		if(thisHit.success && abs(length(thisHit.pos)) < abs(length(hit.pos))) {
