@@ -164,7 +164,7 @@ void lighting(const in float shadowFactor) {
 
 			float attenuationFactor = smoothstep(
 				frx_heldLight.a * 
-				#ifdef BLOCKY_HANDHELD_LIGHT
+				#ifndef BLOCKY_HANDHELD_LIGHT
 					(7.0 + 3.0 * frx_viewBrightness),
 				#else
 					(10.0 + 5.0 * frx_viewBrightness),
@@ -180,7 +180,7 @@ void lighting(const in float shadowFactor) {
 			attenuationFactor = mix(attenuationFactor, 1.0, float(frx_isHand) * frx_heldLight.a);
 			
 			#ifdef COLORED_HANDHELD_LIGHT
-				vec3 heldLightColor = pow(frx_heldLight.rgb * 1.3, vec3(2.0));
+				vec3 heldLightColor = pow(frx_heldLight.rgb * 1.3, vec3(1.5));
 			#else
 				vec3 heldLightColor = texture(frxs_lightmap, vec2(attenuationFactor * 7.0 / 8.0 + 1.0 / 16.0, frx_fragLight.y)).rgb;
 			#endif
