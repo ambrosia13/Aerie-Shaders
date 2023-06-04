@@ -2,6 +2,9 @@
 	"pipeline.aerie.name": "Aerie Shaders",
 	"pipeline.aerie.desc": "Bring vanilla minecraft alive again",
 
+	"pipeline.aerie_shadow.name": "Aerie Shaders (Shadows)",
+	"pipeline.aerie_shadow.desc": "Bring vanilla minecraft alive again",
+
 	"config.aerie.category.general": "General Settings",
 
 	"config.aerie.name.taa": "Temporal Anti Aliasing",

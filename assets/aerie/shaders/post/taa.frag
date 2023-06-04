@@ -12,10 +12,10 @@ layout(location = 0) out vec4 fragColor;
 // tone map and inverse tone map your color texture reads 
 // to prevent bright regions from being fuzzy due to TAA
 vec3 toneMap(in vec3 color) {
-	return color / (color + 1.0);
+	return color;// / (color + 1.0);
 }
 vec3 inverseToneMap(in vec3 color) {
-	return -color / (color - 1.0);
+	return color;//-color / (color - 1.0);
 }
 
 // Neighborhood clipping from "Temporal Reprojection Anti-Aliasing in INSIDE"
@@ -39,7 +39,7 @@ vec3 neighbourhoodClipping(sampler2D currTex, vec3 prevColor) {
 	for(int x = -NEIGHBORHOOD_SIZE; x <= NEIGHBORHOOD_SIZE; x++) {
 		for(int y = -NEIGHBORHOOD_SIZE; y <= NEIGHBORHOOD_SIZE; y++) {
 			vec3 color = texelFetch(currTex, ivec2(gl_FragCoord.xy) + ivec2(x, y), 0).rgb;
-			color = toneMap(color);
+
 			minColor = min(minColor, color); maxColor = max(maxColor, color); 
 		}
 	}
@@ -48,10 +48,10 @@ vec3 neighbourhoodClipping(sampler2D currTex, vec3 prevColor) {
 
 // Blend factor referenced from BSL Shaders
 float taaBlendFactor(in vec2 currentCoord, in vec2 previousCoord) {
-	vec2 velocity = (currentCoord - previousCoord) * frxu_size;
+	vec2 velocity = (currentCoord - previousCoord);
 
 	float blendFactor = float(clamp01(previousCoord) == previousCoord);
-	blendFactor *= exp(-length(velocity)) * 0.1 + 0.8;
+	blendFactor *= smoothstep(0.3, 0.0, length(velocity)) * 0.9;
 
 	return blendFactor;
 }
@@ -69,9 +69,6 @@ void main() {
 
 		vec4 previousColor = texture(u_previous_frame, lastScreenPos.xy);
 
-		color.rgb = toneMap(color.rgb);
-		previousColor.rgb = toneMap(previousColor.rgb);
-
 		vec3 tempColor = neighbourhoodClipping(u_color, previousColor.rgb);
 
 		#ifdef NO_CLIP
@@ -80,7 +77,6 @@ void main() {
 			color.rgb = mix(color.rgb, tempColor, clamp01(taaBlendFactor(texcoord, lastScreenPos.xy)));
 		#endif
 
-		color.rgb = inverseToneMap(color.rgb);
 		fragColor = max(vec4(1.0 / 65536.0), color);
 	#else
 		fragColor = texture(u_color, texcoord);

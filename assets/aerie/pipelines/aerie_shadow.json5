@@ -1,0 +1,9 @@
+{
+	nameKey: "pipeline.aerie_shadow.name",
+	descriptionKey: "pipeline.aerie_shadow.desc",
+
+	include: [
+		"aerie:include/common.json5",
+		"aerie:include/shadow.json5",
+	]
+}

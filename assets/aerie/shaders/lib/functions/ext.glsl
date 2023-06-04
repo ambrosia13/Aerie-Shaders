@@ -43,3 +43,12 @@ float linearizeDepth(float depth) {
 	return 2.0 * (nearZ * farZ) / (farZ + nearZ - (depth * 2.0 - 1.0) * (farZ - nearZ));
 }
 // --------------------------------------------------------------------------------------------------------
+
+// Credit goes to Belmu#4066 for helping me solve my shadow sampling issues through the following two functions.
+vec2 sincos(float x) {
+	return vec2(sin(x), cos(x));
+}
+vec2 diskSampling(float i, float n, float phi) {
+	float theta = (i + phi) / n; 
+	return sincos(theta * TAU * n * 1.618033988749894) * theta;
+}

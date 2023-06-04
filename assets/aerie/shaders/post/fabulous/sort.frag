@@ -109,15 +109,17 @@ void main() {
 			cloudsDepth = sceneSpaceToScreenSpace(cloudsHit.pos).z;
 			// composite = mix(composite, cloudsColor, cloudsAlpha);
 		}
+	#else
+		vec4 cloudsColor = texture(u_clouds_color, texcoord);
+		cloudsColor.rgb = pow(cloudsColor.rgb, vec3(2.2));
+
+		float cloudsDepth = texture(u_clouds_depth, texcoord).r;
 	#endif
 
 	insertLayer(composite, translucentColor, compositeDepth, translucentDepth);
 	insertLayer(composite, particlesColor, compositeDepth, particlesDepth);
 	insertLayer(composite, entityColor, compositeDepth, entityDepth);
-
-	#ifdef CUSTOM_CLOUDS
-		insertLayer(composite, cloudsColor, compositeDepth, cloudsDepth);
-	#endif
+	insertLayer(composite, cloudsColor, compositeDepth, cloudsDepth);
 
 	insertLayer(composite, weatherColor, compositeDepth, weatherDepth);
 

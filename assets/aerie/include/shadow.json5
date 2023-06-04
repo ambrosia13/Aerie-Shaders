@@ -3,7 +3,7 @@
 	images: [
 		{
 			name: "shadow_map",
-			size: 8192,
+			size: 1024,
 			internalFormat: "DEPTH_COMPONENT32",
 			pixelFormat: "DEPTH_COMPONENT",
 			pixelDataType: "FLOAT",
@@ -37,6 +37,6 @@
 		fragmentSource: "aerie:shaders/gbuffer/shadow.frag",
 		offsetSlopeFactor: 1.1,
 		offsetBiasUnits: 4.0,
-		cascadeRadius: [64, 32, 16]
+		cascadeRadius: [64, 32, 8]
 	}
 }

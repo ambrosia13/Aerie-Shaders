@@ -11,6 +11,9 @@ void frx_pipelineVertex() {
 		// Move to clip space
 		gl_Position = frx_viewProjectionMatrix * frx_vertex;
 
+		// Fix entity shadow
+		gl_Position.z += 0.001;
+
 		// block distance
 		frx_distance = length(frx_vertex.xyz);
 	}
