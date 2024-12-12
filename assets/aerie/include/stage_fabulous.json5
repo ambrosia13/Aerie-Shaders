@@ -70,7 +70,7 @@
 			vertexSource: "aerie:shaders/post/frame_full.vert",
 			fragmentSource: "aerie:shaders/post/fabulous/copy.frag",
 			samplers: [
-				"u_composite"
+				"u_color"
 			]
 		}
 	],
